@@ -7,7 +7,7 @@ part of 'current_location_provider.dart';
 // **************************************************************************
 
 String _$currentLocationNotifierHash() =>
-    r'e2826d5dd55048a69deed375330f0d731a57bba1';
+    r'deadfebf01b9b59c37c6b68059457a5be7758c62';
 
 /// See also [CurrentLocationNotifier].
 @ProviderFor(CurrentLocationNotifier)

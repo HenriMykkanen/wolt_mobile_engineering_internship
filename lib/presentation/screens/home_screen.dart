@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wolt_mobile_engineering_internship/application/providers/current_location_provider.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/restaurants.provider.dart';
-import 'package:wolt_mobile_engineering_internship/data/restaurants_repository.dart';
 import 'package:wolt_mobile_engineering_internship/domain/restaurant_data.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -34,6 +33,14 @@ class HomeScreen extends ConsumerWidget {
                                   restaurantData.restaurants[index.key].name),
                               subtitle: Text(restaurantData
                                   .restaurants[index.key].description),
+                              trailing: Icon(Icons.favorite),
+                              leading: Container(
+                                width: 50,
+                                height: 50,
+                                child: CachedNetworkImage(
+                                    imageUrl: restaurantData
+                                        .restaurants[index.key].imageURL),
+                              ),
                             ),
                           );
                         })
