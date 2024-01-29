@@ -21,8 +21,8 @@ class WoltAPI {
     );
   }
 
-  Map<String, dynamic> restaurantQueryParameters(String lat, String lon) => {
-        "lat": lat,
-        "lon": lon,
+  Map<String, dynamic> restaurantQueryParameters(double lat, double lon) => {
+        "lat": lat.toString(),
+        "lon": lon.toString(),
       };
 }

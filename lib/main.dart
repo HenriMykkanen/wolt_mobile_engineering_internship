@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_mobile_engineering_internship/presentation/screens/home_screen.dart';
 
-void main() {
+main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(ProviderScope(child: const MainApp()));
 }
 

@@ -12,11 +12,11 @@ class HttpRestaurantRepository {
   final WoltAPI api;
   final http.Client client;
 
-  Future<Restaurant> getRestaurantData(
-          {required String lat, required String lon}) =>
+  Future<Restaurants> getRestaurants(
+          {required double lat, required double lon}) =>
       _getData(
           uri: api.restaurants(lat, lon),
-          builder: (data) => Restaurant.fromJSON(data));
+          builder: (data) => Restaurants.fromNestedJson(data));
 
   Future<GenericType> _getData<GenericType>({
     required Uri uri,
