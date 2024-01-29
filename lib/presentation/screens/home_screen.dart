@@ -12,19 +12,40 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final restaurantsAsync = ref.watch(restaurantsNotifierProvider);
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Text('Restaurants'),
-              restaurantsAsync.when(
-                data: (restaurantData) => Container(
-                  child: Text(restaurantData.restaurants[0].name),
-                ),
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, _) => Text(e.toString()),
-              )
-            ],
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text('Restaurants'),
+                restaurantsAsync.when(
+                  data: (restaurantData) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ...restaurantData.restaurants
+                            .asMap()
+                            .entries
+                            .map((index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListTile(
+                              title: Text(
+                                  restaurantData.restaurants[index.key].name),
+                              subtitle: Text(restaurantData
+                                  .restaurants[index.key].description),
+                            ),
+                          );
+                        })
+                      ],
+                    );
+                  },
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                  error: (e, _) => Text(e.toString()),
+                )
+              ],
+            ),
           ),
         ),
       ),

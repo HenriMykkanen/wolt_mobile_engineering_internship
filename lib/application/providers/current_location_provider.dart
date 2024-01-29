@@ -10,20 +10,15 @@ part 'current_location_provider.g.dart';
 @Riverpod(keepAlive: true)
 class CurrentLocationNotifier extends AsyncNotifier<Position> {
   Future<Position> _fetchPosition() async {
-    return ref.watch(locationRepositoryProvider).determinePosition();
+    final currentPosition =
+        await ref.watch(locationRepositoryProvider).determinePosition();
+    return currentPosition;
   }
 
   @override
   // get initial location
   FutureOr<Position> build() async {
     return _fetchPosition();
-  }
-
-  // watch for location changes
-  Future<void> getCurrentLocation() async {
-    final locationRepository = ref.read(locationRepositoryProvider);
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(locationRepository.determinePosition);
   }
 
   Future<double> currentLatitude() async {
