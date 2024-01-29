@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:wolt_mobile_engineering_internship/application/providers/current_location_provider.dart';
 import 'package:wolt_mobile_engineering_internship/data/location_repository.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -8,30 +9,21 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocationAsync = ref.watch(currentLocationNotifierProvider);
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              FutureBuilder(
-                future:
-                    ref.watch(locationRepositoryProvider).determinePosition(),
-                builder:
-                    (BuildContext context, AsyncSnapshot<Position> snapshot) {
-                  if (snapshot.hasData) {
-                    return Center(
-                      child: Text(
-                          'Your current location:\\\\nLatitude: ${snapshot.data!.latitude}, Longitude: ${snapshot.data!.longitude}'),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  }
-
-                  // The connection state is still ongoing
-
-                  return CircularProgressIndicator();
-                },
-              ),
+              currentLocationAsync.when(
+                  data: (data) {
+                    return Text(
+                        'Longitude  ${data.longitude} Latitude ${data.latitude}');
+                  },
+                  loading: () => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                  error: (e, _) => Text(e.toString())),
             ],
           ),
         ),
