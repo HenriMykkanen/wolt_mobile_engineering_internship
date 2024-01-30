@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wolt_mobile_engineering_internship/presentation/screens/restaurants_screen.dart';
+import 'package:wolt_mobile_engineering_internship/constants/theme.dart';
+import 'package:wolt_mobile_engineering_internship/presentation/screens/home_screen.dart';
 
 main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,9 +13,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      theme: getAppTheme(context),
+      home: const HomeScreen(),
     );
   }
 }
