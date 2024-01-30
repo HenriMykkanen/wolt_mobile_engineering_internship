@@ -5,8 +5,9 @@ import 'package:wolt_mobile_engineering_internship/presentation/screens/home_scr
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
-  runApp(ProviderScope(overrides: [], child: const MainApp()));
+  // This might not need to be here so it's commented out for now
+  // final prefs = await SharedPreferences.getInstance();
+  runApp(ProviderScope(child: const MainApp()));
 }
 
 class MainApp extends StatelessWidget {
