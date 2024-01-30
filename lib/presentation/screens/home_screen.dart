@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:wolt_mobile_engineering_internship/application/providers/current_location_provider.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/favourites_provider.dart';
+import 'package:wolt_mobile_engineering_internship/application/providers/location_provider_simple.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/restaurants.provider.dart';
-import 'package:wolt_mobile_engineering_internship/data/location_repository.dart';
 import 'package:wolt_mobile_engineering_internship/domain/restaurant.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -16,6 +15,42 @@ class HomeScreen extends ConsumerWidget {
     final favouriteRestaurants = ref.watch(favouritesListProvider);
     final restaurantsAsync = ref.watch(restaurantsNotifierProvider);
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          ElevatedButton(
+              onPressed: () {
+                Position kuopio = Position(
+                    longitude: 27.6780,
+                    latitude: 62.8928,
+                    timestamp: DateTime.now(),
+                    accuracy: 0,
+                    altitude: 0,
+                    altitudeAccuracy: 0,
+                    heading: 0,
+                    headingAccuracy: 0,
+                    speed: 0,
+                    speedAccuracy: 0);
+                ref.watch(locationProvider.notifier).setLocation(kuopio);
+              },
+              child: Text('To Kuopio')),
+          ElevatedButton(
+              onPressed: () {
+                Position helsinki = Position(
+                    longitude: 24.930599,
+                    latitude: 60.170187,
+                    timestamp: DateTime.now(),
+                    accuracy: 0,
+                    altitude: 0,
+                    altitudeAccuracy: 0,
+                    heading: 0,
+                    headingAccuracy: 0,
+                    speed: 0,
+                    speedAccuracy: 0);
+                ref.watch(locationProvider.notifier).setLocation(helsinki);
+              },
+              child: Text('To Helsinki'))
+        ],
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -25,8 +60,12 @@ class HomeScreen extends ConsumerWidget {
                     restaurantData: trimRestaurantList(restaurantData),
                     favouriteRestaurants: favouriteRestaurants);
               },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              // TODO this actually initially throws a null check error because provider dependancies aren't initialized
+              loading: () => const Column(
+                children: [
+                  Text('Discovering restaurants near you...'),
+                  Center(child: CircularProgressIndicator()),
+                ],
+              ),
               error: (e, _) => Text(e.toString()),
             ),
           ),
