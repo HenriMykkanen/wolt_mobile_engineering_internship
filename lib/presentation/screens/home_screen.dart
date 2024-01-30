@@ -1,24 +1,18 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/favourites_provider.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/location_provider.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/restaurants.provider.dart';
 import 'package:wolt_mobile_engineering_internship/domain/restaurant.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:wolt_mobile_engineering_internship/presentation/animations/fade_in.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
+class HomeScreen extends HookConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenPageState createState() => _HomeScreenPageState();
-}
-
-class _HomeScreenPageState extends ConsumerState<HomeScreen> {
-  bool _visible = true;
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final favouriteRestaurants = ref.watch(favouritesListProvider);
     final restaurantsAsync = ref.watch(restaurantsNotifierProvider);
     return Scaffold(
@@ -34,34 +28,24 @@ class _HomeScreenPageState extends ConsumerState<HomeScreen> {
         ],
       ),
       body: SafeArea(
-        child: AnimatedOpacity(
-          opacity: _visible ? 0.5 : 1,
-          duration: const Duration(milliseconds: 800),
-          curve: Curves.easeInOut,
-          child: Center(
-            child: SingleChildScrollView(
-              child: restaurantsAsync.when(
-                data: (restaurantData) {
-                  setState(() {
-                    _visible = true;
-                  });
-                  return RestaurantContents(
-                      restaurantData: trimRestaurantList(restaurantData),
-                      favouriteRestaurants: favouriteRestaurants);
-                },
-                loading: () {
-                  setState(() {
-                    _visible = false;
-                  });
-                  return const Column(
-                    children: [
-                      Text('Discovering restaurants near you...'),
-                      Center(child: CircularProgressIndicator()),
-                    ],
-                  );
-                },
-                error: (e, _) => Text(e.toString()),
-              ),
+        child: Center(
+          child: SingleChildScrollView(
+            child: restaurantsAsync.when(
+              data: (restaurantData) {
+                return FadeIn(
+                    child: RestaurantContents(
+                        restaurantData: trimRestaurantList(restaurantData),
+                        favouriteRestaurants: favouriteRestaurants));
+              },
+              loading: () {
+                return const Column(
+                  children: [
+                    Text('Discovering restaurants near you...'),
+                    Center(child: CircularProgressIndicator()),
+                  ],
+                );
+              },
+              error: (e, _) => Text(e.toString()),
             ),
           ),
         ),
@@ -69,6 +53,8 @@ class _HomeScreenPageState extends ConsumerState<HomeScreen> {
     );
   }
 }
+
+void toggleOpacity() {}
 
 // Helper function just to check if restaurant is in the favourites list
 bool isRestaurantFavourited(Restaurant restaurant, List<String> favorites) {
