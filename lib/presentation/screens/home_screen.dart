@@ -1,25 +1,28 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wolt_mobile_engineering_internship/application/providers/favourites_provider.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/restaurants.provider.dart';
+import 'package:wolt_mobile_engineering_internship/domain/restaurant.dart';
 import 'package:wolt_mobile_engineering_internship/domain/restaurant_data.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:wolt_mobile_engineering_internship/application/providers/favourites_controller.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final favourites = ref.watch(favouritesListProvider);
     final restaurantsAsync = ref.watch(restaurantsNotifierProvider);
-    final favouritesController = FavouritesController();
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 24, 0, 0),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 24, 0, 0),
                   child: Text(
                     '15 Restaurants near you!',
                     style: TextStyle(fontSize: 24),
@@ -34,35 +37,52 @@ class HomeScreen extends ConsumerWidget {
                             .asMap()
                             .entries
                             .map((index) {
+                          final currentRestaurant =
+                              restaurantData.restaurants[index.key];
                           return Padding(
                             padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
                             child: ListTile(
                               style: ListTileStyle.list,
                               title: Text(
-                                restaurantData.restaurants[index.key].name,
-                                style: TextStyle(fontSize: 20),
+                                currentRestaurant.name,
+                                style: const TextStyle(fontSize: 20),
                               ),
-                              subtitle: Text(restaurantData
-                                  .restaurants[index.key].description),
+                              subtitle: Text(currentRestaurant.description),
                               trailing: GestureDetector(
-                                  onTap: () {
-                                    favouritesController.addFavouriteRestaurant(
-                                        restaurantData
-                                            .restaurants[index.key].id);
-                                  },
-                                  child: isFavouriteOrNot(restaurantData
-                                      .restaurants[index.key].id)),
+                                  onTap: !isFavourite(
+                                          currentRestaurant, favourites)
+                                      ?
+                                      // add fav
+                                      () {
+                                          ref
+                                              .read(favouritesListProvider
+                                                  .notifier)
+                                              .addToFav(currentRestaurant.id);
+                                        }
+                                      :
+                                      // remove fav
+                                      () {
+                                          ref
+                                              .read(favouritesListProvider
+                                                  .notifier)
+                                              .removeFromFav(
+                                                  currentRestaurant.id);
+                                        },
+                                  child:
+                                      isFavourite(currentRestaurant, favourites)
+                                          ? const Icon(Icons.favorite)
+                                          : const Icon(
+                                              Icons.favorite_border_outlined)),
                               leading: Container(
                                 width: 100,
                                 height: 100,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   shape: BoxShape.rectangle,
                                 ),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: CachedNetworkImage(
-                                    imageUrl: restaurantData
-                                        .restaurants[index.key].imageURL,
+                                    imageUrl: currentRestaurant.imageURL,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -106,11 +126,10 @@ class RestaurantContents extends ConsumerWidget {
   }
 }
 
-Icon isFavouriteOrNot(String restaurantID) {
-  final favouritesController = FavouritesController();
-  if (favouritesController.isFavouriteRestaurant(restaurantID) == true) {
-    return Icon(Icons.favorite);
+bool isFavourite(Restaurant restaurant, List<String> favorites) {
+  if (favorites.contains(restaurant.id)) {
+    return true;
   } else {
-    return Icon(Icons.favorite_border_outlined);
+    return false;
   }
 }
