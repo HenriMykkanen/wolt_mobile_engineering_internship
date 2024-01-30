@@ -1,19 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Is meant to provide rest of the application a list of favourite restaurants
 final favouritesListProvider =
     StateNotifierProvider<FavoriteController, List<String>>((ref) {
   return FavoriteController();
 });
 
 class FavoriteController extends StateNotifier<List<String>> {
-  // constructor
+  // constructor and initial fetch
   FavoriteController() : super([]) {
     _fetchFavourites();
   }
 
   // SHARED PREFENCES
-  // initial fetch from shared preferences
+  // fetch from shared preferences
   _fetchFavourites() async {
     final prefs = await SharedPreferences.getInstance();
     final savedFavourites = prefs.getStringList('favourites') ?? [];

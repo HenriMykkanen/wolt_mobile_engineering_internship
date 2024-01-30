@@ -11,6 +11,7 @@ class HttpRestaurantRepository {
   final WoltAPI api;
   final http.Client client;
 
+  // Uses latitude and longitude coordinates and gets a list of all the restaurants near the user
   Future<Restaurants> getRestaurants(
           {required double lat, required double lon}) =>
       _getData(
@@ -26,7 +27,6 @@ class HttpRestaurantRepository {
       switch (response.statusCode) {
         case 200: // 200 OK - Indicates that the request has succeeded
           final data = json.decode(response.body);
-          // print(data);
           return builder(data);
         case 404: // 404 Not Found - The server can not find the requested resource
           throw RestaurantNotFoundException();
@@ -39,6 +39,7 @@ class HttpRestaurantRepository {
   }
 }
 
+// Provides access to an instance of the repository
 final restaurantRepositoryProvider = Provider<HttpRestaurantRepository>((ref) {
   return HttpRestaurantRepository(api: WoltAPI(), client: http.Client());
 });

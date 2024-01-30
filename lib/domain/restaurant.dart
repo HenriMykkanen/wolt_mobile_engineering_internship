@@ -10,6 +10,7 @@ class Restaurant {
   final String name;
   final String description;
   final String imageURL;
+  // this bool defaults to false, it's purpose is to be compared to favourites from shared preferences while building the UI
   final bool isFavourite;
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
@@ -17,7 +18,7 @@ class Restaurant {
     final name = json['venue']['name'] as String? ?? '';
     final description = json['venue']['short_description'] as String? ?? '';
     final imageURL = json['image']['url'] as String? ?? '';
-    final isFavourite = false;
+    const isFavourite = false;
 
     return Restaurant(
         id: id,
@@ -25,15 +26,6 @@ class Restaurant {
         description: description,
         imageURL: imageURL,
         isFavourite: isFavourite);
-  }
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'short_description': description,
-      'imageURL': imageURL,
-      'isFavourite': isFavourite,
-    };
   }
 }
 

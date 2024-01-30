@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/favourites_provider.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/location_provider.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/restaurants.provider.dart';
@@ -19,36 +18,11 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           ElevatedButton(
               onPressed: () {
-                Position kuopio = Position(
-                    longitude: 27.6780,
-                    latitude: 62.8928,
-                    timestamp: DateTime.now(),
-                    accuracy: 0,
-                    altitude: 0,
-                    altitudeAccuracy: 0,
-                    heading: 0,
-                    headingAccuracy: 0,
-                    speed: 0,
-                    speedAccuracy: 0);
-                ref.watch(locationProvider.notifier).setLocation(kuopio);
+                ref
+                    .watch(locationProvider.notifier)
+                    .mockLocationChangeLoop(inputList);
               },
-              child: Text('To Kuopio')),
-          ElevatedButton(
-              onPressed: () {
-                Position helsinki = Position(
-                    longitude: 24.930599,
-                    latitude: 60.170187,
-                    timestamp: DateTime.now(),
-                    accuracy: 0,
-                    altitude: 0,
-                    altitudeAccuracy: 0,
-                    heading: 0,
-                    headingAccuracy: 0,
-                    speed: 0,
-                    speedAccuracy: 0);
-                ref.watch(locationProvider.notifier).setLocation(helsinki);
-              },
-              child: Text('To Helsinki'))
+              child: const Text('Start loop')),
         ],
       ),
       body: SafeArea(
@@ -128,18 +102,16 @@ class RestaurantContents extends ConsumerWidget {
               ),
               subtitle: Text(currentRestaurant.description),
               trailing: GestureDetector(
+                  // compare restaurant to restaurantIDs stored in local storage
+                  // build ontap functions and fav icons based on that
                   onTap: isRestaurantFavourited(
                           currentRestaurant, favouriteRestaurants)
-                      ?
-                      // add fav
-                      () {
+                      ? () {
                           ref
                               .read(favouritesListProvider.notifier)
                               .removeFromFav(currentRestaurant.id);
                         }
-                      :
-                      // remove fav
-                      () {
+                      : () {
                           ref
                               .read(favouritesListProvider.notifier)
                               .addToFav(currentRestaurant.id);
