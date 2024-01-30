@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wolt_mobile_engineering_internship/application/providers/current_location_provider.dart';
-import 'package:wolt_mobile_engineering_internship/application/providers/location_provider_simple.dart';
+import 'package:wolt_mobile_engineering_internship/application/providers/location_provider.dart';
 import 'package:wolt_mobile_engineering_internship/data/restaurants_repository.dart';
 import 'package:wolt_mobile_engineering_internship/domain/restaurant.dart';
 

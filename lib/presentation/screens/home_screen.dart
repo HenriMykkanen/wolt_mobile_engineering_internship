@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/favourites_provider.dart';
-import 'package:wolt_mobile_engineering_internship/application/providers/location_provider_simple.dart';
+import 'package:wolt_mobile_engineering_internship/application/providers/location_provider.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/restaurants.provider.dart';
 import 'package:wolt_mobile_engineering_internship/domain/restaurant.dart';
 import 'package:cached_network_image/cached_network_image.dart';
