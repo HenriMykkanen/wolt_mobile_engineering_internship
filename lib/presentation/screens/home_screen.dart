@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/current_location_provider.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/favourites_provider.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/restaurants.provider.dart';
@@ -44,6 +45,7 @@ bool isRestaurantFavourited(Restaurant restaurant, List<String> favorites) {
   }
 }
 
+// Helper function to trim the amount of restaurants to a max of 15
 Restaurants trimRestaurantList(Restaurants original) {
   final restaurantsList = original.restaurants;
   if (restaurantsList.length > 15) {

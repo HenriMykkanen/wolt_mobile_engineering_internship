@@ -13,11 +13,12 @@ class Restaurant {
   final bool isFavourite;
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
-    final id = json['venue']['id'] as String;
-    final name = json['venue']['name'] as String;
-    final description = json['venue']['short_description'] as String;
-    final imageURL = json['image']['url'] as String;
+    final id = json['venue']['id'] as String? ?? '';
+    final name = json['venue']['name'] as String? ?? '';
+    final description = json['venue']['short_description'] as String? ?? '';
+    final imageURL = json['image']['url'] as String? ?? '';
     final isFavourite = false;
+
     return Restaurant(
         id: id,
         name: name,
