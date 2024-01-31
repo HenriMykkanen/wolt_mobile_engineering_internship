@@ -18,7 +18,7 @@ class HomeScreen extends HookConsumerWidget {
     final restaurantsAsync = ref.watch(restaurantsNotifierProvider);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(200, 0, 194, 232),
+        backgroundColor: const Color.fromARGB(200, 0, 194, 232),
         elevation: 8,
         toolbarHeight: 80,
         centerTitle: true,

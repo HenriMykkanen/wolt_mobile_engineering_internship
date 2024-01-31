@@ -20,8 +20,8 @@ import 'package:wolt_mobile_engineering_internship/presentation/screens/home_scr
 //
 // I do wish I had a bit more time to work on the application, because it
 // was a really fun experience. I only noticed the job opening 2 days prior
-// to the deadline. Other than that, I hope that you enjoy my submission and
-// that it satisfies the requirements listed in the assignment :)
+// to the deadline. I hope that you enjoy my submission an that it satisfies the
+// requirements listed in the assignment :)
 //
 // Henri Mykkänen 31/01/2024
 
