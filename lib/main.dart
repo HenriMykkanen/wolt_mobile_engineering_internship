@@ -18,9 +18,7 @@ import 'package:wolt_mobile_engineering_internship/presentation/screens/home_scr
 // I chose to not initiate the loop straight at the start so that it's a bit easier
 // to play around with the UI when it doesn't change constantly, unless you choose so.
 //
-// I do wish I had a bit more time to work on the application, because it
-// was a really fun experience. I only noticed the job opening 2 days prior
-// to the deadline. I hope that you enjoy my submission an that it satisfies the
+// I hope that you enjoy my submission an that it satisfies the
 // requirements listed in the assignment :)
 //
 // Henri Mykkänen 31/01/2024
