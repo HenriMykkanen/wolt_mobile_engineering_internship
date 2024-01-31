@@ -1,3 +1,4 @@
+import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/favourites_provider.dart';
@@ -16,34 +17,37 @@ class HomeScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final favouriteRestaurants = ref.watch(favouritesListProvider);
     final restaurantsAsync = ref.watch(restaurantsNotifierProvider);
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(200, 0, 194, 232),
-        elevation: 8,
-        toolbarHeight: 80,
-        centerTitle: true,
-        title: Stack(children: [
-          // logo
-          const Image(image: AssetImage('assets/woltlogo.jpeg')),
-          // start loop button
-          Positioned(
-            left: 0,
-            top: 100,
-            child: TextButton(
-                onPressed: () {
-                  ref
-                      .watch(locationProvider.notifier)
-                      .mockLocationChangeLoop(inputList);
-                },
-                child: const Text(
-                  'Start loop',
-                  style: TextStyle(fontSize: 12, color: Colors.white),
-                )),
-          ),
-        ]),
-      ),
-      body: SafeArea(
-        child: Center(
+    return ColorfulSafeArea(
+      color: const Color.fromARGB(255, 0, 194, 232),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(200, 0, 194, 232),
+          elevation: 8,
+          toolbarHeight: 80,
+          centerTitle: true,
+          title: Stack(children: [
+            // logo
+            const Image(
+                width: double.infinity,
+                image: AssetImage('assets/woltlogo.jpeg')),
+            // start loop button
+            Positioned(
+              left: 0,
+              top: 100,
+              child: TextButton(
+                  onPressed: () {
+                    ref
+                        .watch(locationProvider.notifier)
+                        .mockLocationChangeLoop(inputList);
+                  },
+                  child: const Text(
+                    'Start loop',
+                    style: TextStyle(fontSize: 12, color: Colors.white),
+                  )),
+            ),
+          ]),
+        ),
+        body: Center(
           child: SingleChildScrollView(
             child: restaurantsAsync.when(
               data: (restaurantData) {
