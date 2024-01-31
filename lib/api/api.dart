@@ -21,6 +21,7 @@ class WoltAPI {
     );
   }
 
+  // Coordinates are handled as doubles around the code but converted to strings here in the end
   Map<String, dynamic> restaurantQueryParameters(double lat, double lon) => {
         "lat": lat.toString(),
         "lon": lon.toString(),

@@ -12,6 +12,7 @@ class LocationController extends StateNotifier<Position> {
   LocationController() : super(_setInitialLocation());
 
   // initial state
+  // Location here is the so called center of the world (Kuopio marketplace)
   static Position _setInitialLocation() {
     return Position(
       longitude: 27.6780,

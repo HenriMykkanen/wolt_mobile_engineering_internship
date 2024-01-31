@@ -15,20 +15,32 @@ class HomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favouriteRestaurants = ref.watch(favouritesListProvider);
-    print(favouriteRestaurants);
     final restaurantsAsync = ref.watch(restaurantsNotifierProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Container(),
-        actions: [
-          ElevatedButton(
-              onPressed: () {
-                ref
-                    .watch(locationProvider.notifier)
-                    .mockLocationChangeLoop(inputList);
-              },
-              child: const Text('Start loop')),
-        ],
+        backgroundColor: Color.fromARGB(200, 0, 194, 232),
+        elevation: 8,
+        toolbarHeight: 80,
+        centerTitle: true,
+        title: Stack(children: [
+          // logo
+          const Image(image: AssetImage('assets/woltlogo.jpeg')),
+          // start loop button
+          Positioned(
+            left: 0,
+            top: 100,
+            child: TextButton(
+                onPressed: () {
+                  ref
+                      .watch(locationProvider.notifier)
+                      .mockLocationChangeLoop(inputList);
+                },
+                child: const Text(
+                  'Start loop',
+                  style: TextStyle(fontSize: 12, color: Colors.white),
+                )),
+          ),
+        ]),
       ),
       body: SafeArea(
         child: Center(
@@ -52,7 +64,7 @@ class HomeScreen extends HookConsumerWidget {
                     ),
                     const Center(
                         child: CircularProgressIndicator(
-                      color: Color.fromRGBO(0, 194, 232, 100),
+                      color: Color.fromARGB(200, 0, 194, 232),
                     )),
                   ],
                 );
@@ -128,7 +140,7 @@ class RestaurantContents extends ConsumerWidget {
                 ),
                 // Favourite button
                 trailing: InkWell(
-                  splashColor: Color.fromARGB(50, 0, 194, 232),
+                  splashColor: const Color.fromARGB(90, 0, 194, 232),
                   borderRadius: BorderRadius.circular(24),
                   // compare restaurant to restaurantIDs stored in local storage
                   // build ontap functions and fav icons based on that
@@ -137,12 +149,12 @@ class RestaurantContents extends ConsumerWidget {
                       ? () {
                           ref
                               .read(favouritesListProvider.notifier)
-                              .removeFromFav(currentRestaurant.id);
+                              .removeFromFavourites(currentRestaurant.id);
                         }
                       : () {
                           ref
                               .read(favouritesListProvider.notifier)
-                              .addToFav(currentRestaurant.id);
+                              .addToFavourites(currentRestaurant.id);
                         },
                   child: Ink(
                     height: 40,

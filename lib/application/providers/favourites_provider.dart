@@ -3,13 +3,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Is meant to provide rest of the application a list of favourite restaurants
 final favouritesListProvider =
-    StateNotifierProvider<FavoriteController, List<String>>((ref) {
-  return FavoriteController();
+    StateNotifierProvider<FavouriteController, List<String>>((ref) {
+  return FavouriteController();
 });
 
-class FavoriteController extends StateNotifier<List<String>> {
+class FavouriteController extends StateNotifier<List<String>> {
   // constructor and initial fetch
-  FavoriteController() : super([]) {
+  FavouriteController() : super([]) {
     _fetchFavourites();
   }
 
@@ -29,7 +29,7 @@ class FavoriteController extends StateNotifier<List<String>> {
 
   // LOCAL STATE
   // add fav
-  void addToFav(String restaurantID) {
+  void addToFavourites(String restaurantID) {
     if (restaurantID == '') {
       return;
     }
@@ -38,7 +38,7 @@ class FavoriteController extends StateNotifier<List<String>> {
   }
 
   // remove fav
-  void removeFromFav(String restaurantID) {
+  void removeFromFavourites(String restaurantID) {
     state = state.where((id) => id != restaurantID).toList();
     _saveFavourites();
   }

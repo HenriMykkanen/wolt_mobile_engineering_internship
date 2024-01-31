@@ -12,6 +12,7 @@ class HttpRestaurantRepository {
   final http.Client client;
 
   // Uses latitude and longitude coordinates and gets a list of all the restaurants near the user
+  // Actual api path creation is in api.dart
   Future<Restaurants> getRestaurants(
           {required double lat, required double lon}) =>
       _getData(
