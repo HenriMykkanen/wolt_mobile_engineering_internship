@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/favourites_provider.dart';
 import 'package:wolt_mobile_engineering_internship/application/providers/location_provider.dart';
@@ -7,6 +6,8 @@ import 'package:wolt_mobile_engineering_internship/application/providers/restaur
 import 'package:wolt_mobile_engineering_internship/domain/restaurant.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:wolt_mobile_engineering_internship/presentation/animations/fade_in.dart';
+import 'package:wolt_mobile_engineering_internship/utilities/favourite_checker.dart';
+import 'package:wolt_mobile_engineering_internship/utilities/trim_restaurant_list.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,9 +15,11 @@ class HomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favouriteRestaurants = ref.watch(favouritesListProvider);
+    print(favouriteRestaurants);
     final restaurantsAsync = ref.watch(restaurantsNotifierProvider);
     return Scaffold(
       appBar: AppBar(
+        title: Container(),
         actions: [
           ElevatedButton(
               onPressed: () {
@@ -38,10 +41,19 @@ class HomeScreen extends HookConsumerWidget {
                         favouriteRestaurants: favouriteRestaurants));
               },
               loading: () {
-                return const Column(
+                return Column(
                   children: [
-                    Text('Discovering restaurants near you...'),
-                    Center(child: CircularProgressIndicator()),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                      child: Text(
+                        'Discovering restaurants near you...',
+                        style: Theme.of(context).textTheme.displayMedium,
+                      ),
+                    ),
+                    const Center(
+                        child: CircularProgressIndicator(
+                      color: Color.fromRGBO(0, 194, 232, 100),
+                    )),
                   ],
                 );
               },
@@ -51,28 +63,6 @@ class HomeScreen extends HookConsumerWidget {
         ),
       ),
     );
-  }
-}
-
-void toggleOpacity() {}
-
-// Helper function just to check if restaurant is in the favourites list
-bool isRestaurantFavourited(Restaurant restaurant, List<String> favorites) {
-  if (favorites.contains(restaurant.id)) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-// Helper function to trim the amount of restaurants to a max of 15
-Restaurants trimRestaurantList(Restaurants original) {
-  final restaurantsList = original.restaurants;
-  if (restaurantsList.length > 15) {
-    final trimmedList = restaurantsList.sublist(0, 15);
-    return Restaurants(restaurants: trimmedList);
-  } else {
-    return original;
   }
 }
 
@@ -100,39 +90,46 @@ class RestaurantContents extends ConsumerWidget {
         ...restaurantData.restaurants.asMap().entries.map((index) {
           final currentRestaurant = restaurantData.restaurants[index.key];
           return Padding(
-            padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-            child: ListTile(
-              iconColor: Theme.of(context).iconTheme.color,
-              style: ListTileStyle.list,
-              leading: SizedBox(
-                width: 80,
-                height: 80,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: CachedNetworkImage(
-                    imageUrl: currentRestaurant.imageURL,
-                    fit: BoxFit.cover,
+              padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+              child: ListTile(
+                iconColor: Theme.of(context).iconTheme.color,
+                style: ListTileStyle.list,
+                // Restaurant image
+                leading: SizedBox(
+                  width: 80,
+                  height: 80,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: CachedNetworkImage(
+                      imageUrl: currentRestaurant.imageURL,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                child: Text(
-                  currentRestaurant.name,
-                  style: Theme.of(context).textTheme.displayMedium,
+                // Restaurant name
+                title: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                  child: Text(
+                    currentRestaurant.name,
+                    style: Theme.of(context).textTheme.displayMedium,
+                  ),
                 ),
-              ),
-              subtitle: Container(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
-                decoration: const BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(width: 0.1, color: Colors.black38))),
-                child: Text(
-                  currentRestaurant.description,
-                  style: Theme.of(context).textTheme.displaySmall,
+                // Short description
+                subtitle: Container(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          bottom:
+                              BorderSide(width: 0.1, color: Colors.black38))),
+                  child: Text(
+                    currentRestaurant.description,
+                    style: Theme.of(context).textTheme.displaySmall,
+                  ),
                 ),
-              ),
-              trailing: GestureDetector(
+                // Favourite button
+                trailing: InkWell(
+                  splashColor: Color.fromARGB(50, 0, 194, 232),
+                  borderRadius: BorderRadius.circular(24),
                   // compare restaurant to restaurantIDs stored in local storage
                   // build ontap functions and fav icons based on that
                   onTap: isRestaurantFavourited(
@@ -147,12 +144,16 @@ class RestaurantContents extends ConsumerWidget {
                               .read(favouritesListProvider.notifier)
                               .addToFav(currentRestaurant.id);
                         },
-                  child: isRestaurantFavourited(
-                          currentRestaurant, favouriteRestaurants)
-                      ? const Icon(Icons.favorite)
-                      : const Icon(Icons.favorite_border_outlined)),
-            ),
-          );
+                  child: Ink(
+                    height: 40,
+                    width: 40,
+                    child: isRestaurantFavourited(
+                            currentRestaurant, favouriteRestaurants)
+                        ? const Icon(Icons.favorite)
+                        : const Icon(Icons.favorite_border_outlined),
+                  ),
+                ),
+              ));
         })
       ],
     );
