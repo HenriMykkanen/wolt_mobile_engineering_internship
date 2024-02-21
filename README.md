@@ -1,6 +1,6 @@
 # Wolt 2024 Mobile Engineering Internship submission
 
-My take on the preliminary assignment for Wolt Flutter internship in Finland found here [WoltApp GitHub](https://github.com/woltapp/mobile-engineering-internship-2024)
+My take on the preliminary assignment for Wolt Flutter internship in Finland found here [Instructions GitHub](https://github.com/woltapp/mobile-engineering-internship-2024)
 
 ## Video & screenshots featuring core functionalities and theming:
 
