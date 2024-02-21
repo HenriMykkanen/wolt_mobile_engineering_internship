@@ -21,8 +21,9 @@ class HomeScreen extends HookConsumerWidget {
       color: const Color.fromARGB(255, 0, 194, 232),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(200, 0, 194, 232),
-          elevation: 8,
+          backgroundColor: const Color.fromARGB(255, 0, 193, 232),
+          scrolledUnderElevation: 0.0,
+          elevation: 0,
           toolbarHeight: 80,
           centerTitle: true,
           title: Stack(children: [
@@ -41,7 +42,7 @@ class HomeScreen extends HookConsumerWidget {
                         .mockLocationChangeLoop(inputList);
                   },
                   child: const Text(
-                    'Start loop',
+                    '',
                     style: TextStyle(fontSize: 12, color: Colors.white),
                   )),
             ),
